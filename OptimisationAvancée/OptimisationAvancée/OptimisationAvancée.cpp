@@ -141,7 +141,8 @@ void Backward(std::vector<Turbine>& Centrale, double ElevationAmont, double Elev
 		else {
 			// On calcul notre production en fonction du débit max et du débit turbiné restant
 			indice = Centrale[0].DebitMax / Centrale[0].Discretisation;
-			std::cout << "indice = " << indice << ", size = " << Centrale[0].ChuteNette.size() << "\n";
+
+			//TODO: débugger cette ligne là ->
 			vProduction[i] = ProductionT1(Centrale[0].ChuteNette[indice], Centrale[0].DebitMax) + Centrale[1].Production[(DebitTotal - Centrale[0].DebitMax) / 5];
 		}
 	}
