@@ -1,0 +1,40 @@
+﻿  OptimisationAvancée.cpp
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(32): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(51): warning C4244: 'argument' : conversion de 'double' en 'int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(53): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(65): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(66): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(67): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(68): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(70): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(88): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(91): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(93): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(94): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(98): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(108): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(117): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(128): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(132): warning C4244: 'argument' : conversion de 'double' en 'const unsigned int', perte possible de données
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(138): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(140): warning C4244: '=' : conversion de '_Ty' en 'int', perte possible de données
+          with
+          [
+              _Ty=double
+          ]
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(155): warning C4244: '-=' : conversion de '_Ty' en 'int', perte possible de données
+          with
+          [
+              _Ty=double
+          ]
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(195): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(199): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(212): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(243): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(246): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\samue\source\repos\OptimisationAvancée\OptimisationAvancée\OptimisationAvancée.cpp(248): warning C4244: '=' : conversion de '_Ty' en 'int', perte possible de données
+          with
+          [
+              _Ty=double
+          ]
+  OptimisationAvancée.vcxproj -> C:\Users\samue\source\repos\OptimisationAvancée\Debug\OptimisationAvancée.exe
