@@ -22,9 +22,12 @@ void RemplissageDecisionProduction(Turbine& uneTurbine);
 int main()
 {
 	//On définit nos variable d'entrée
-	double ElevationAmmont = 12000;
-	double DebitTotale = 100 ;
-	double ElevationAvale = DebitTotale * 0.5;
+	double ElevationAmont = 137.89;
+	double DebitTotal = 469.84;
+
+	// On applique la fonction permettant d'estimer l'élévation en aval en fonction du débit total
+	double ElevationAval = -1.461 * pow(10,-6) * DebitTotal * DebitTotal + 7.064 * pow(10,-3) * DebitTotal + 99.96;
+	std::cout << "Elevation aval calculée: " << ElevationAval << "\n";
 
 	//On Initialise notre Centrale
 	std::vector<Turbine> Centrale;
@@ -34,21 +37,21 @@ int main()
 	}
 	
 	//On définit les valeurs de DebitMax
-	Centrale[1].DebitMax = 90;
-	Centrale[2].DebitMax = 70;
-	Centrale[3].DebitMax = 80;
-	Centrale[4].DebitMax = 70;
-	Centrale[0].DebitMax = 60;
+	Centrale[1].DebitMax = 160;
+	Centrale[2].DebitMax = 160;
+	Centrale[3].DebitMax = 160;
+	Centrale[4].DebitMax = 160;
+	Centrale[0].DebitMax = 160;
 
 	//On utilise notre fonction pour lancer notre phase arrière
-	Backward(Centrale, ElevationAmmont, ElevationAvale, DebitTotale);
+	Backward(Centrale, ElevationAmont, ElevationAval, DebitTotal);
 
 	//On initialise notre vecteur Solution qui va contenir les débit turbiné de chaque turbine
 	std::vector<double>vSolution;
 	vSolution.resize(5);
 
 	//On utilise notre fonction Forward pour lancer notre phase avant
-	Forward(Centrale, vSolution, DebitTotale);
+	Forward(Centrale, vSolution, DebitTotal);
 
 	//On affiche notre solution
 	for (int i = 0; i < vSolution.size();i++) {
@@ -59,19 +62,19 @@ int main()
 
 
 
-void Backward(std::vector<Turbine>& Centrale, double ElevationAmmont, double ElevationAval, double DebitTotale)
+void Backward(std::vector<Turbine>& Centrale, double ElevationAmont, double ElevationAval, double DebitTotal)
 {
-
+	
 	//On commence notre fonction de Backward avec notre dernière Turbine
-	Centrale[4].Production.resize(DebitTotale / Centrale[4].Discretisation + 1);
-	Centrale[4].ChuteNette.resize(DebitTotale / Centrale[4].Discretisation + 1);
-	Centrale[4].Etats.resize(DebitTotale / Centrale[4].Discretisation + 1);
-	Centrale[4].VariableDecision.resize(DebitTotale / Centrale[4].Discretisation + 1);
+	Centrale[4].Production.resize(DebitTotal / Centrale[4].Discretisation + 1);
+	Centrale[4].ChuteNette.resize(DebitTotal / Centrale[4].Discretisation + 1);
+	Centrale[4].Etats.resize(DebitTotal / Centrale[4].Discretisation + 1);
+	Centrale[4].VariableDecision.resize(DebitTotal / Centrale[4].Discretisation + 1);
 
 	for (int i = 0; i < Centrale[4].Production.size(); i++) {
-		//On remplie nos valeurs pour la turbine 5
+		//On remplit nos valeurs pour la turbine 5
 		Centrale[4].Etats[i] = i * Centrale[4].Discretisation;
-		Centrale[4].ChuteNette[i] = HauteurChutteNette(ElevationAmmont, ElevationAval, Centrale[4].Etats[i]);
+		Centrale[4].ChuteNette[i] = HauteurChutteNette(ElevationAmont, ElevationAval, Centrale[4].Etats[i]);
 		Centrale[4].VariableDecision[i] = Centrale[4].Etats[i];
 
 		//On vérifie si le débit ne passe pas le débit max de la turbine.
@@ -83,17 +86,18 @@ void Backward(std::vector<Turbine>& Centrale, double ElevationAmmont, double Ele
 		}
 	}
 
-	//On initialise les valeurs des tableaux pour les turbines 4 à 1
+
+	//On initialise les valeurs des tableaux pour les turbines 4 à 2
 	for (int eTurbine = 3; eTurbine > 0; eTurbine--) {
 
 		
-		Centrale[eTurbine].Production.resize(DebitTotale / Centrale[eTurbine].Discretisation + 1);
+		Centrale[eTurbine].Production.resize(DebitTotal / Centrale[eTurbine].Discretisation + 1);
 		Centrale[eTurbine].ChuteNette.resize(Centrale[eTurbine].DebitMax / Centrale[eTurbine].Discretisation + 1);
 		Centrale[eTurbine].Etats.resize(Centrale[eTurbine].DebitMax / Centrale[eTurbine].Discretisation + 1);
-		Centrale[eTurbine].VariableDecision.resize(DebitTotale / Centrale[eTurbine].Discretisation + 1);
+		Centrale[eTurbine].VariableDecision.resize(DebitTotal / Centrale[eTurbine].Discretisation + 1);
 
 		//On intialise la Matrice de Decisions qui va nous aider à trouver la quantité que l'on va turbiner en fonction de la quantité reçus
-		Centrale[eTurbine].MatriceDecision.resize(DebitTotale / Centrale[eTurbine].Discretisation + 1);
+		Centrale[eTurbine].MatriceDecision.resize(DebitTotal / Centrale[eTurbine].Discretisation + 1);
 		for (int eResize = 0; eResize < Centrale[eTurbine].MatriceDecision.size(); eResize++) {
 			Centrale[eTurbine].MatriceDecision[eResize].resize(eResize+1);
 		}
@@ -102,7 +106,7 @@ void Backward(std::vector<Turbine>& Centrale, double ElevationAmmont, double Ele
 		for (int i = 0; i < Centrale[eTurbine].Etats.size(); i++) {
 
 			Centrale[eTurbine].Etats[i] = i * Centrale[eTurbine].Discretisation;
-			Centrale[eTurbine].ChuteNette[i] = HauteurChutteNette(ElevationAmmont, ElevationAval, Centrale[eTurbine].Etats[i]);
+			Centrale[eTurbine].ChuteNette[i] = HauteurChutteNette(ElevationAmont, ElevationAval, Centrale[eTurbine].Etats[i]);
 		}
 
 		//On remplie notre Matrice de Décision
@@ -112,7 +116,7 @@ void Backward(std::vector<Turbine>& Centrale, double ElevationAmmont, double Ele
 	}
 
 	//On intialise nos tableaux pour la Turbine 1
-	Centrale[0].Production.resize(DebitTotale / Centrale[0].Discretisation + 1);
+	Centrale[0].Production.resize(DebitTotal / Centrale[0].Discretisation + 1);
 	Centrale[0].ChuteNette.resize(Centrale[0].DebitMax / Centrale[0].Discretisation + 1);
 	Centrale[0].Etats.resize(Centrale[0].DebitMax / Centrale[0].Discretisation + 1);
 	Centrale[0].VariableDecision.resize(1);
@@ -122,23 +126,23 @@ void Backward(std::vector<Turbine>& Centrale, double ElevationAmmont, double Ele
 	
 	//On initialise le vecteur contenant la production de notre Turbine en fonction du débit qu'elle turbinera
 	std::vector<double> vProduction;
-	vProduction.resize(DebitTotale / Centrale[0].Discretisation + 1);
+	vProduction.resize(DebitTotal / Centrale[0].Discretisation + 1);
 
-	for (int i = 0; i < DebitTotale / Centrale[0].Discretisation + 1; i++) {
-
+	for (int i = 0; vProduction.size(); i++) {
 		debit = i * Centrale[0].Discretisation;
 
 		//On vérifie que notre débit ne dépasse pas le débit max de notre Turbine
 		if (debit <= Centrale[0].DebitMax) {
 			Centrale[0].Etats[i] = Centrale[0].DebitMax;
-			Centrale[0].ChuteNette[i] = HauteurChutteNette(ElevationAmmont, ElevationAval, debit);
+			Centrale[0].ChuteNette[i] = HauteurChutteNette(ElevationAmont, ElevationAval, debit);
 			//On calcul notre production en fonction du débit turbiné et du débit turbiné restant 
-			vProduction[i] = ProductionT1(Centrale[0].ChuteNette[i], debit) + Centrale[1].Production[DebitTotale/5 - i];
+			vProduction[i] = ProductionT1(Centrale[0].ChuteNette[i], debit) + Centrale[1].Production[DebitTotal/5 - i];
 		}
 		else {
 			// On calcul notre production en fonction du débit max et du débit turbiné restant
 			indice = Centrale[0].DebitMax / Centrale[0].Discretisation;
-			vProduction[i] = ProductionT1(Centrale[0].ChuteNette[indice], Centrale[0].DebitMax) + Centrale[1].Production[(DebitTotale - Centrale[0].DebitMax) / 5];
+			std::cout << "indice = " << indice << ", size = " << Centrale[0].ChuteNette.size() << "\n";
+			vProduction[i] = ProductionT1(Centrale[0].ChuteNette[indice], Centrale[0].DebitMax) + Centrale[1].Production[(DebitTotal - Centrale[0].DebitMax) / 5];
 		}
 	}
 
@@ -173,33 +177,33 @@ void Forward(std::vector<Turbine> Centrale, std::vector<double>& Solution, int D
 }
 	
 //Fonction retournant la Production de la Turbine 1 en fonctio d'une Hauteur et d'un Débit
-double ProductionT1(double uneHauteur, double unDebit)
+double ProductionT1(double HCN, double Q)
 {
-	return unDebit * uneHauteur;
+	return (13.44 * HCN + 0.1889 * Q - 0.1935 * HCN * HCN - 0.02236 * HCN * Q + 0.005538 * Q * Q + 0.0004944 * HCN * HCN * Q - 3.527 * pow(10,-5) * HCN * Q * Q - 1.594 * pow(10,-5) * Q * Q * Q - 233.3);
 }
 
 //Fonction retournant la Production de la Turbine 2 en fonctio d'une Hauteur et d'un Débit
-double ProductionT2(double uneHauteur, double unDebit)
+double ProductionT2(double HCN, double Q)
 {
-	return unDebit * uneHauteur;
+	return (0.05147 * HCN * HCN + 0.01775 * HCN * Q - 1.112 * pow(10,-4) * Q * Q - 4.138 * HCN - 0.2848 * Q + 81.59);
 }
 
 //Fonction retournant la Production de la Turbine 3 en fonctio d'une Hauteur et d'un Débit
-double ProductionT3(double uneHauteur, double unDebit)
+double ProductionT3(double HCN, double Q)
 {
-	return unDebit * uneHauteur;
+	return (0.1159 * HCN * HCN + 7.561 * pow(10,-3) * HCN * Q - 5.412 * pow(10,-4) * Q * Q - 7.882 * HCN - 0.1156 * Q - 134);
 }
 
 //Fonction retournant la Production de la Turbine 4 en fonctio d'une Hauteur et d'un Débit
-double ProductionT4(double uneHauteur, double unDebit)
+double ProductionT4(double HCN, double Q)
 {
-	return unDebit * uneHauteur;
+	return (0.292 * HCN * HCN + 0.06985 * HCN * Q + 2.132 * pow(10,-4) * Q * Q - 28.21 * HCN - 2.143 * Q + 629);
 }
 
 //Fonction retournant la Production de la Turbine 5 en fonctio d'une Hauteur et d'un Débit
-double ProductionT5(double uneHauteur, double unDebit)
+double ProductionT5(double HCN, double Q)
 {
-	return unDebit * uneHauteur;
+	return (-0.05268 * HCN * HCN + 0.01091 * HCN * Q - 4.945 * pow(10,-4) * Q * Q + 3.403 * HCN - 0.01165 * Q - 54.64);
 }
 
 double HauteurChutteNette(double uneElevationAmmont, double uneElevationAval, double unDebit)
