@@ -128,7 +128,7 @@ void Backward(std::vector<Turbine>& Centrale, double ElevationAmont, double Elev
 	std::vector<double> vProduction;
 	vProduction.resize(DebitTotal / Centrale[0].Discretisation + 1);
 
-	for (int i = 0; vProduction.size(); i++) {
+	for (int i = 0; i < vProduction.size(); i++) {
 		debit = i * Centrale[0].Discretisation;
 
 		//On vérifie que notre débit ne dépasse pas le débit max de notre Turbine
