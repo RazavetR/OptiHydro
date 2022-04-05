@@ -5,6 +5,11 @@
 #include <iostream>
 #include <vector>
 #include "Turbine.h"
+#include <sstream>
+#include <fstream>
+#include <map>
+
+using namespace std;
 
 void Backward(std::vector<Turbine>& Centrale, double ElevationAmmont, double ElevationAval, double DebitTotale);
 void Forward(std::vector<Turbine> Centrale, std::vector<double>& Solution, int DebitTotale);
@@ -19,46 +24,123 @@ double HauteurChutteNette(double uneElevationAmmont, double uneElevationAval, do
 void RemplissageMatrice(Turbine& uneTurbine, int NumeroTurbine, std::vector<Turbine> uneCentrale);
 void RemplissageDecisionProduction(Turbine& uneTurbine);
 
+void ReadFromFile(string filename);
+
 int main()
 {
-	//On définit nos variable d'entrée
-	double ElevationAmont = 137.88;
-	double DebitTotal = 655;
+	ReadFromFile("C:/Users/romai/UQAC/Optimisation/data.csv");
 
-	// On applique la fonction permettant d'estimer l'élévation en aval en fonction du débit total
-	double ElevationAval = -1.461 * pow(10, -6) * DebitTotal * DebitTotal + 7.064 * pow(10, -3) * DebitTotal + 99.96;
-	std::cout << "Elevation aval calculée: " << ElevationAval << "\n";
+	////On définit nos variable d'entrée
+	//double ElevationAmont = 137.88;
+	//double DebitTotal = 655;
 
-	//On Initialise notre Centrale
-	std::vector<Turbine> Centrale;
-	Centrale.resize(5);
-	for (int i = 0; i < Centrale.size();i++) {
-		Centrale[i] = Turbine();
-	}
+	//// On applique la fonction permettant d'estimer l'élévation en aval en fonction du débit total
+	//double ElevationAval = -1.461 * pow(10, -6) * DebitTotal * DebitTotal + 7.064 * pow(10, -3) * DebitTotal + 99.96;
+	//std::cout << "Elevation aval calculée: " << ElevationAval << "\n";
 
-	//On définit les valeurs de DebitMax
-	Centrale[1].DebitMax = 160;
-	Centrale[2].DebitMax = 160;
-	Centrale[3].DebitMax = 160;
-	Centrale[4].DebitMax = 160;
-	Centrale[0].DebitMax = 160;
+	////On Initialise notre Centrale
+	//std::vector<Turbine> Centrale;
+	//Centrale.resize(5);
+	//for (int i = 0; i < Centrale.size();i++) {
+	//	Centrale[i] = Turbine();
+	//}
 
-	//On utilise notre fonction pour lancer notre phase arrière
-	Backward(Centrale, ElevationAmont, ElevationAval, DebitTotal);
+	////On définit les valeurs de DebitMax
+	//Centrale[1].DebitMax = 160;
+	//Centrale[2].DebitMax = 160;
+	//Centrale[3].DebitMax = 160;
+	//Centrale[4].DebitMax = 160;
+	//Centrale[0].DebitMax = 160;
 
-	//On initialise notre vecteur Solution qui va contenir les débit turbiné de chaque turbine
-	std::vector<double>vSolution;
-	vSolution.resize(5);
+	////On utilise notre fonction pour lancer notre phase arrière
+	//Backward(Centrale, ElevationAmont, ElevationAval, DebitTotal);
 
-	//On utilise notre fonction Forward pour lancer notre phase avant
-	Forward(Centrale, vSolution, DebitTotal);
+	////On initialise notre vecteur Solution qui va contenir les débit turbiné de chaque turbine
+	//std::vector<double>vSolution;
+	//vSolution.resize(5);
 
-	//On affiche notre solution
-	for (int i = 0; i < vSolution.size();i++) {
-		std::cout << "La Turbine " << i << " devra turbiner " << vSolution[i] * 5 << " m^3/sec \n";
-	}
-	std::cout << "Pour une energie produite de " << Centrale[0].Production[0] << " W \n";
+	////On utilise notre fonction Forward pour lancer notre phase avant
+	//Forward(Centrale, vSolution, DebitTotal);
+
+	////On affiche notre solution
+	//for (int i = 0; i < vSolution.size();i++) {
+	//	std::cout << "La Turbine " << i << " devra turbiner " << vSolution[i] * 5 << " m^3/sec \n";
+	//}
+	//std::cout << "Pour une energie produite de " << Centrale[0].Production[0] << " W \n";
 }
+
+void ReadFromFile(string filename) {
+	ifstream file(filename);
+
+	int row = 0;
+	while (!file.eof())
+	{
+		string ligne, element;
+
+		getline(file, ligne);
+		stringstream str_strm(ligne);
+
+		// On lit les différents élements qui composent la ligne
+		int count = 0;
+		double Q = 0, ElevAm = 0;
+		double QTurb[5];
+		while (getline(str_strm, element, ';')) {
+			if (count == 0) {
+				Q = atof(element.c_str());
+			}
+			else if (count == 1) {
+				ElevAm = atof(element.c_str());
+			}
+			else {
+				QTurb[count - 2] = atof(element.c_str());
+			}
+
+			count++;
+		}
+
+		// On applique la fonction permettant d'estimer l'élévation en aval en fonction du débit total
+		double ElevationAval = -1.461 * pow(10, -6) * Q * Q + 7.064 * pow(10, -3) * Q + 99.96;
+
+		//On Initialise notre Centrale
+		std::vector<Turbine> Centrale;
+		Centrale.resize(5);
+		for (int i = 0; i < Centrale.size(); i++) {
+			Centrale[i] = Turbine();
+		}
+
+		//On définit les valeurs de DebitMax
+		for (int nbTurb = 0; nbTurb < 5; nbTurb++) {
+			if (QTurb[nbTurb] == 0) {
+				Centrale[nbTurb].DebitMax = 0;
+			}
+			else {
+				Centrale[nbTurb].DebitMax = 160;
+			}
+		}
+
+		//On utilise notre fonction pour lancer notre phase arrière
+		Backward(Centrale, ElevAm, ElevationAval, Q);
+
+		//On initialise notre vecteur Solution qui va contenir les débit turbiné de chaque turbine
+		std::vector<double>vSolution;
+		vSolution.resize(5);
+
+		//On utilise notre fonction Forward pour lancer notre phase avant
+		Forward(Centrale, vSolution, Q);
+
+		//On affiche notre solution
+		cout << "Ligne No" << row+1 << " - QTot = " << Q << ", ElevAm = " << ElevAm << ", ElevAv = " << ElevationAval << " - \t";
+		for (int i = 0; i < vSolution.size(); i++) {
+			cout << "Q" << i + 1 << "=" << vSolution[i] * 5 << " m^3/sec, ";
+		}
+		std::cout << " - P=" << Centrale[0].Production[0] << "W \n";
+
+		row++;
+	}
+
+}
+
+
 
 
 
